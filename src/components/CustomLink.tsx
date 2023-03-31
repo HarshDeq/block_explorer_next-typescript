@@ -1,9 +1,10 @@
+import { ChildrenProp } from "@/utils/interfaces";
 import { styled } from "@mui/system";
 import Link from "next/link";
 import { ReactNode } from "react";
 
 interface Props {
-  children?: ReactNode | null | undefined;
+  children?: ChildrenProp
   href: string;
   label?: string | null;
 }

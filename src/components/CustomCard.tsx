@@ -1,8 +1,9 @@
+import { ChildrenProp } from "@/utils/interfaces";
 import { styled } from "@mui/system";
 import { ReactNode } from "react";
 
 interface Props {
-  children: ReactNode | null | undefined;
+  children: ChildrenProp
   className?: string;
 }
 

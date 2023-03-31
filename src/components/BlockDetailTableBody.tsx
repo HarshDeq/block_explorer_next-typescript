@@ -1,14 +1,9 @@
-import { Block } from "@/redux/blocks/reducer";
 import { RootState } from "@/redux/store";
 import { getTimeDiff } from "@/utils/getTimeDiff";
+import { IBlockRowProps } from "@/utils/interfaces";
 import { TableBody, TableCell, TableRow } from "@mui/material";
 import { useSelector } from "react-redux";
 import CustomLink from "./CustomLink";
-
-interface BlockRowProps {
-  blockNumber: number | string;
-  block: Block;
-}
 
 const BlockDetailTableBody = () => {
   const { blocks, arrOfBlockNumber } = useSelector(
@@ -30,14 +25,14 @@ const BlockDetailTableBody = () => {
   );
 };
 
-const BlockRow = (props: BlockRowProps) => {
+const BlockRow = (props: IBlockRowProps) => {
   const { block, blockNumber } = props;
   return (
     <TableRow>
       <TableCell>
         <CustomLink href={`/block/${blockNumber}`}>{blockNumber}</CustomLink>
       </TableCell>
-      <TableCell>{getTimeDiff(block.timestamp)}</TableCell>
+      <TableCell>{getTimeDiff(Number(block.timestamp))}</TableCell>
       <TableCell>Fee Recipient {block.miner}</TableCell>
       <TableCell>{block.transactionCount}</TableCell>
     </TableRow>
