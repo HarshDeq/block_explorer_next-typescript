@@ -10,12 +10,12 @@ export const getBlocks = async (numberOfBlock: number) => {
   const latestBlockNumber = await web3_instance.eth.getBlockNumber();
 
   const blocksDetails: any = {};
-
+  
   for (
     let blockNumber = latestBlockNumber;
     blockNumber > latestBlockNumber - numberOfBlock;
     blockNumber--
-  ) {
+    ) {
     const block = await getBlockDetailByBlockNumber(blockNumber);
     blocksDetails[blockNumber] = block;
   }

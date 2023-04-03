@@ -7,13 +7,13 @@ import CustomLink from "./CustomLink";
 
 const BlockDetailTableBody = () => {
   const { blocks, arrOfBlockNumber } = useSelector(
-    (state:RootState) => state.blocksDetails
+    (state: RootState) => state.blocksDetails
   );
 
   return (
     <>
       <TableBody>
-        {arrOfBlockNumber.map((blockNumber:string) => (
+        {arrOfBlockNumber.map((blockNumber: string) => (
           <BlockRow
             block={blocks[blockNumber]}
             blockNumber={blockNumber}
@@ -34,7 +34,9 @@ const BlockRow = (props: IBlockRowProps) => {
       </TableCell>
       <TableCell>{getTimeDiff(Number(block.timestamp))}</TableCell>
       <TableCell>Fee Recipient {block.miner}</TableCell>
-      <TableCell>{block.transactionCount}</TableCell>
+      <TableCell>
+        <CustomLink href={`/txs?block=${blockNumber}`}>{block.transactionCount}</CustomLink>
+      </TableCell>
     </TableRow>
   );
 };

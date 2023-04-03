@@ -1,20 +1,30 @@
-import { getChunks } from "@/utils/arrayMethods";
-import { getAllTransactionsDetailList, getBlockDetailByBlockNumber, getBlocks } from "@/utils/blockMethods";
+import { getBlockDetailByBlockNumber, getBlocks } from "@/utils/blockMethods";
 import {
   IAddLatestBlocksDispatchType,
-  IBlock,
   ISetCurrentBlockDetails,
   ISetCurrentBlockDetailsDispatchType,
   ISetLatestBlocksDetail,
+  ISetLoading,
 } from "@/utils/interfaces";
 import { Dispatch } from "react";
-import { ADD_LATEST_BLOCKS, SET_CURRENT_BLOCK_DETAILS } from "./actionTypes";
+import {
+  ADD_LATEST_BLOCKS,
+  SET_CURRENT_BLOCK_DETAILS,
+  SET_LOADING,
+} from "./actionTypes";
 
 const setBlocksDetails = (
   payload: ISetLatestBlocksDetail
 ): IAddLatestBlocksDispatchType => {
   return {
     type: ADD_LATEST_BLOCKS,
+    payload,
+  };
+};
+
+export const setLoading = (payload: boolean): ISetLoading => {
+  return {
+    type: SET_LOADING,
     payload,
   };
 };
@@ -30,30 +40,23 @@ export const setCurrentBlockDetails = (
 
 export const getLatestBlocks =
   (numberOfBlock: number) =>
-  async (dispatch: Dispatch<IAddLatestBlocksDispatchType>) => {
+  async (dispatch: Dispatch<IAddLatestBlocksDispatchType | ISetLoading>) => {
     const blocks = await getBlocks(numberOfBlock);
+    dispatch(setLoading(false));
     dispatch(setBlocksDetails(blocks));
   };
 
 export const getBlockDetails =
   (blockNumber: number | string) =>
-  async (dispatch: Dispatch<ISetCurrentBlockDetailsDispatchType>) => {
+  async (
+    dispatch: Dispatch<ISetCurrentBlockDetailsDispatchType | ISetLoading>
+  ) => {
     const blockDetails = await getBlockDetailByBlockNumber(blockNumber);
-    console.log(blockDetails);
     dispatch(
       setCurrentBlockDetails({
         currentBlockNumber: blockNumber,
         currentBlockDetails: blockDetails,
       })
     );
+    dispatch(setLoading(false));
   };
-
-  export const getTransactionDetails = (transactionArr:string[])=> async(dispatch)=>{
-    let batchOfTrasactions = getChunks(transactionArr,5)
-
-    for(let i =0 ;i<batchOfTrasactions.length;i++){
-      let transactionsDetails = await getAllTransactionsDetailList(batchOfTrasactions[i])
-      console.log(transactionsDetails)
-    }
-    
-  }

@@ -1,7 +1,15 @@
 import CustomCard from "@/components/CustomCard";
-import { getBlockDetails, setCurrentBlockDetails } from "@/redux/blocks/action";
+import CustomLink from "@/components/CustomLink";
+import Spinner from "@/components/Spinner";
+import {
+  getBlockDetails,
+  setCurrentBlockDetails,
+  setLoading,
+} from "@/redux/blocks/action";
 import { RootState } from "@/redux/store";
 import { getTimeDiff } from "@/utils/getTimeDiff";
+import { CallbackFunction } from "@/utils/interfaces";
+import { createLinkForTransaction } from "@/utils/utilFuction";
 import { Grid } from "@mui/material";
 import { useRouter } from "next/router";
 import React, { useEffect } from "react";
@@ -10,18 +18,19 @@ import { useDispatch, useSelector } from "react-redux";
 const BlockDetails = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const { blocks, currentBlockNumber, currentBlockDetails } = useSelector(
-    (state: RootState) => state.blocksDetails
-  );
+  const { blocks, currentBlockNumber, currentBlockDetails, isLoading } =
+    useSelector((state: RootState) => state.blocksDetails);
 
   useEffect(() => {
-    if (router.query.blockNumber) {
+    dispatch(setLoading(true));
+
+    if (router.query?.blockNumber) {
       const blockNumber = Number(router.query.blockNumber);
 
       if (currentBlockNumber === blockNumber) {
-        //set loding false and display from current block
-        console.log(1);
+        dispatch(setLoading(false));
       } else if (blocks[Number(blockNumber)]) {
+        dispatch(setLoading(false));
         dispatch(
           setCurrentBlockDetails({
             currentBlockNumber: blockNumber,
@@ -29,14 +38,14 @@ const BlockDetails = () => {
           })
         );
       } else {
-        dispatch<any>(getBlockDetails(blockNumber));
+        dispatch(getBlockDetails(blockNumber));
       }
     }
-  }, [router]);
+  }, [router.query]);
 
   return (
     <>
-      {currentBlockDetails && (
+      {currentBlockDetails && !isLoading ? (
         <CustomCard>
           <div className="spacing">
             <Grid container>
@@ -53,7 +62,7 @@ const BlockDetails = () => {
               </Grid>
               <Grid item>
                 {currentBlockDetails &&
-                  getTimeDiff(currentBlockDetails.timestamp)}
+                  getTimeDiff(Number(currentBlockDetails.timestamp))}
               </Grid>
             </Grid>
           </div>
@@ -63,7 +72,11 @@ const BlockDetails = () => {
                 Transactions:
               </Grid>
               <Grid item>
-                {currentBlockDetails.transactionCount} transactions
+                <CustomLink
+                  href={createLinkForTransaction(String(currentBlockNumber))}
+                >
+                  {currentBlockDetails.transactionCount} transactions
+                </CustomLink>
               </Grid>
             </Grid>
           </div>
@@ -116,6 +129,8 @@ const BlockDetails = () => {
             </Grid>
           </div>
         </CustomCard>
+      ) : (
+        <Spinner />
       )}
     </>
   );

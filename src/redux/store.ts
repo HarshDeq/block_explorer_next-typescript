@@ -1,16 +1,19 @@
 import { createWrapper } from "next-redux-wrapper";
 import { applyMiddleware, combineReducers, compose, createStore } from "redux";
 import thunk from "redux-thunk";
-import { BlockDetailState, blockReducer } from "./blocks/reducer";
+import {  blockReducer } from "./blocks/reducer";
+import { IBlockDetailState, ITransactionsDetailState } from "@/utils/interfaces";
+import { transactionReducer } from "./transactions/reducer";
 
 export interface RootState{
-  blocksDetails:BlockDetailState
-
+  blocksDetails:IBlockDetailState,
+  transactionsDetails:ITransactionsDetailState
 }
 
 
 const rootReducer = combineReducers({
-  blocksDetails:blockReducer
+  blocksDetails:blockReducer,
+  transactionsDetails:transactionReducer
 })
 
 
@@ -27,3 +30,4 @@ console.log( typeof store.getState())
 const makeStore = () => store;
 
 export const wrapper = createWrapper(makeStore);
+export type AppDispatch = typeof store.dispatch

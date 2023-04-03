@@ -6,14 +6,10 @@ import Header from "@/components/Header";
 import Spinner from "@/components/Spinner";
 
 function App({ Component, pageProps }: AppProps) {
-  const {isLoading} = useSelector((state:RootState)=> state.blocksDetails)
   return (
     <Provider store={store}>
       <Header>
-        { 
-          isLoading? <Spinner/>:
         <Component {...pageProps} />
-        }
       </Header>
     </Provider>
   );
