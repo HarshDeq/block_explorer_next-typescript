@@ -13,7 +13,7 @@ export const transactionReducer = (state:ITransactionsDetailState = init, action
         case ADD_TRANSACTIONS:
             return {
                 ...state,
-                transactionsDetails:[...state.transactionsDetails,...action.payload.transactionsDetails]
+                transactionsDetails:[...action.payload.transactionsDetails]
             }
 
         case SET_BLOCK_NUMBER:

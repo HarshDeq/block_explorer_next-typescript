@@ -3,12 +3,14 @@ import Spinner from "@/components/Spinner";
 import TransactionRow from "@/components/TransactionRow";
 import { setLoading } from "@/redux/blocks/action";
 import { RootState } from "@/redux/store";
-import { setBlockNumberForTransactions } from "@/redux/transactions/action";
 import {
-  getTransactionDetails,
-  getTransactionDetailsByBlockNumber,
-  resetTransactions,
+  setBlockNumberForTransactions,
+  setTransactions,
 } from "@/redux/transactions/action";
+import { resetTransactions } from "@/redux/transactions/action";
+import { getChunks } from "@/utils/arrayMethods";
+import { IAddTransactionsDetailsDispatchType } from "@/utils/interfaces";
+import useWeb3Hook from "@/utils/useWeb3Hook";
 import {
   Table,
   TableBody,
@@ -21,7 +23,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const HEADERS = ["Txn Hash", "Block", "Age", "From", "To", "Value", "Txn Fee"];
+const HEADERS = ['Index',"Txn Hash", "Block", "Age", "From", "To", "Value", "Txn Fee"];
 
 const TransactionDetails = () => {
   const router = useRouter();
@@ -29,27 +31,56 @@ const TransactionDetails = () => {
   const { blocksDetails, transactionsDetails } = useSelector(
     (state: RootState) => state
   );
+
+  const [
+    transactionsList,
+    getAllTransactionsDetailList,
+    getTransactionDetailsByBlockNumber,
+  ] = useWeb3Hook();
+
+  const getTransactionsDetailList = async (
+    blockNumber: string,
+    transactionsList: string[]
+  ) => {
+    dispatch(resetTransactions());
+    dispatch(setBlockNumberForTransactions(blockNumber));
+
+    let batchOfTrasactions = getChunks(transactionsList, 5);
+
+    await getAllTransactionsDetailList(batchOfTrasactions);
+  };
+
+  const getBlockDetailsByBlockNumber = async (blockNumber: string) => {
+    const blockDetails = await getTransactionDetailsByBlockNumber(blockNumber);
+    const transactions = [...blockDetails.transactions];
+    getTransactionsDetailList(blockNumber, transactions);
+  };
+
   useEffect(() => {
     dispatch(setLoading(true));
 
     if (router?.query?.block) {
-      const blockNumber = router.query?.block;
-
-      if (blockNumber === transactionsDetails.blockNumberOfTransactions) {
-        dispatch(setLoading(false));
-      } else if (blocksDetails.blocks[Number(blockNumber)]) {
-        dispatch(resetTransactions());
-        dispatch(setBlockNumberForTransactions(blockNumber));
-        const transactionsList =
-          blocksDetails.blocks[Number(blockNumber)].transactions;
-        dispatch(getTransactionDetails(transactionsList));
+      const blockNumber = String(router.query?.block);
+      if (blocksDetails.blocks[Number(blockNumber)]) {
+      const transactionsList = [
+        ...blocksDetails.blocks[Number(blockNumber)].transactions,
+      ];
+      getTransactionsDetailList(blockNumber, transactionsList);
       } else {
-        dispatch(resetTransactions());
-        dispatch(setBlockNumberForTransactions(blockNumber));
-        dispatch(getTransactionDetailsByBlockNumber(blockNumber));
+        getBlockDetailsByBlockNumber(blockNumber);
       }
     }
   }, [router]);
+
+  useEffect(() => {
+    if (transactionsList.length )  {
+      dispatch(setLoading(false));
+      dispatch<IAddTransactionsDetailsDispatchType>(
+        setTransactions({ transactionsDetails: transactionsList })
+      );
+    }
+  }, [transactionsList]);
+
   return (
     <div>
       {!blocksDetails.isLoading &&
@@ -65,7 +96,7 @@ const TransactionDetails = () => {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {transactionsDetails.transactionsDetails?.map((transaction) => (
+                {transactionsDetails.transactionsDetails?.map((transaction,index) => (
                   <TransactionRow
                     key={transaction?.hash}
                     transaction={transaction}

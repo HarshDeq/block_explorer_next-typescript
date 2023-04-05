@@ -23,10 +23,6 @@ export const store = createStore(
   createComposer(applyMiddleware(thunk)),
 );
 
-console.log( typeof store.getState())
-
-// export type RootState = ReturnType<typeof store.getState>
-
 const makeStore = () => store;
 
 export const wrapper = createWrapper(makeStore);
