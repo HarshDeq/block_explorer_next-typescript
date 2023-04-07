@@ -51,7 +51,7 @@ const useWeb3Hook = () => {
     transactionsList,
     getAllTransactionsDetailList,
     getTransactionDetailsByBlockNumber,
-  ];
+  ] as const;
 };
 
 export default useWeb3Hook;
