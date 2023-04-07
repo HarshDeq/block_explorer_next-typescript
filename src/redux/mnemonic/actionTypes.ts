@@ -1,0 +1,4 @@
+export const SET_MNEMONIC = 'SET_MNEMONIC'
+export const SET_NEW_ADDRESSES = 'SET_NEW_ADDRESSES'
+export const SET_DERIVED_PATH = 'SET_DERIVED_PATH'
+export const RESET = 'RESET'

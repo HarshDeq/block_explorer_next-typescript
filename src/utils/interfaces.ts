@@ -78,3 +78,17 @@ export interface ISetLoading{
 }
 
 export type CallbackFunction = (arg:Function) => void
+
+
+
+// Mnemonic interface
+
+export interface MnemonicGeneratorState{
+  mnemonicWord:null | string,
+  entropy:null | Uint8Array,
+  seedString:null| string,
+  seedBuffer:Uint8Array|null,
+  wordLength:number,
+  derivedAddresses:string[],
+  path:string
+}
