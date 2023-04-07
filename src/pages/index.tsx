@@ -20,7 +20,7 @@ export default function Home() {
   const dispatch = useDispatch();
 
   const loadLatestBlock = () => {
-    dispatch(getLatestBlocks(5));
+    dispatch<any>(getLatestBlocks(5));
   };
 
   const refresh = () =>{
