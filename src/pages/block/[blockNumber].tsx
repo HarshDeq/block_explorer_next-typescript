@@ -38,7 +38,7 @@ const BlockDetails = () => {
           })
         );
       } else {
-        dispatch(getBlockDetails(blockNumber));
+        dispatch<any>(getBlockDetails(blockNumber));
       }
     }
   }, [router.query]);
