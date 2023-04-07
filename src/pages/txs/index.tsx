@@ -23,7 +23,7 @@ import { useRouter } from "next/router";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
-const HEADERS = ['Index',"Txn Hash", "Block", "Age", "From", "To", "Value", "Txn Fee"];
+const HEADERS = ["Txn Hash", "Block", "Age", "From", "To", "Value", "Txn Fee"];
 
 const TransactionDetails = () => {
   const router = useRouter();
@@ -75,7 +75,7 @@ const TransactionDetails = () => {
   useEffect(() => {
     if (transactionsList.length )  {
       dispatch(setLoading(false));
-      dispatch<IAddTransactionsDetailsDispatchType>(
+      dispatch(
         setTransactions({ transactionsDetails: transactionsList })
       );
     }

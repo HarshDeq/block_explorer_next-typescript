@@ -17,6 +17,11 @@ const CustomAppBar = styled(AppBar)(() => ({
   },
 }));
 
+const StyledDiv = styled("div")(() => ({
+  display: "flex",
+  justifyContent: "space-between",
+}));
+
 const ContentBody = styled("div")(() => ({
   marginTop: "5rem",
 }));
@@ -27,9 +32,25 @@ const Header = (props: Props) => {
     <>
       <CustomAppBar>
         <Container maxWidth="xl">
-          <CustomLink href="/">
-            <div className="logo">Logo</div>
-          </CustomLink>
+          <StyledDiv>
+            <CustomLink href="/">
+              <div className="logo">Logo</div>
+            </CustomLink>
+            <StyledDiv>
+              <div style={{ marginRight: "1rem" }}>
+                <CustomLink href="/">
+                  <div style={{ textDecoration: "underline" }}>
+                    Block Explorer{" "}
+                  </div>
+                </CustomLink>
+              </div>
+              <div>
+                <CustomLink href="/mnemonic">
+                <div  style={{ textDecoration: "underline" }}>Mnemonic</div>
+                </CustomLink>
+              </div>
+            </StyledDiv>
+          </StyledDiv>
         </Container>
       </CustomAppBar>
       <ContentBody>{children}</ContentBody>

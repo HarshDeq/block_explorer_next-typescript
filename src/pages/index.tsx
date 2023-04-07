@@ -11,6 +11,8 @@ import ReplayIcon from "@mui/icons-material/Replay";
 
 const HEADERS = ["Block No.", "Age", "Miner", "Transaction Count"];
 
+let interval:ReturnType<typeof setInterval> |undefined
+
 export default function Home() {
   const { arrOfBlockNumber, isLoading } = useSelector(
     (state: RootState) => state.blocksDetails
@@ -21,14 +23,26 @@ export default function Home() {
     dispatch(getLatestBlocks(5));
   };
 
+  const refresh = () =>{
+    clearInterval(interval)
+    loadLatestBlock();
+    interval = setInterval(()=>{
+      loadLatestBlock();
+    },20000)
+  }
+
   useEffect(() => {
     dispatch(setLoading(true));
-    if (!arrOfBlockNumber.length) {
+    loadLatestBlock();
+    interval = setInterval(()=>{
       loadLatestBlock();
-    } else {
-      dispatch(setLoading(false));
+    },20000)
+    console.log(typeof interval)
+
+    return ()=>{
+      clearInterval(interval)
     }
-  }, [arrOfBlockNumber]);
+  }, []);
 
   return (
     <>
@@ -37,7 +51,7 @@ export default function Home() {
           <div style={{ display: "flex" }}>
             <h3>Latest Blocks</h3>
             <Tooltip title="Load Latest Blocks" followCursor>
-              <IconButton sx={{ color: "black" }} onClick={loadLatestBlock}>
+              <IconButton sx={{ color: "black" }} onClick={refresh}>
                 <ReplayIcon />
               </IconButton>
             </Tooltip>

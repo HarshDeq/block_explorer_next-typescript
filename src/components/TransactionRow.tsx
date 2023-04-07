@@ -3,6 +3,7 @@ import { TableCell, TableRow, styled } from '@mui/material'
 import React from 'react'
 import CustomLink from './CustomLink'
 import { createLinkForBlock } from '@/utils/utilFuction'
+import { getTimeDiff } from '@/utils/getTimeDiff'
 
 interface Props{
     transaction:ITransaction
@@ -21,7 +22,9 @@ const TransactionRow = (props:Props) => {
     <TableRow>
     <TableCell>
         <StyledDiv >
+            <CustomLink href={`/txs/${transaction.hash}`}>
             {transaction?.hash}
+            </CustomLink>
         </StyledDiv>
     </TableCell>
     <TableCell>
@@ -32,7 +35,7 @@ const TransactionRow = (props:Props) => {
         </StyledDiv>
     </TableCell>
     <TableCell>
-        Age
+        age
     </TableCell>
     <TableCell>
         <StyledDiv >

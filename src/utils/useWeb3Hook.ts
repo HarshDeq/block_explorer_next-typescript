@@ -6,7 +6,6 @@ import {
   getTransctionDetails,
 } from "./blockMethods";
 import Web3 from "web3";
-import { getChunks } from "./arrayMethods";
 
 const useWeb3Hook = () => {
   const [open, setOpen] = useState<boolean>(false);
