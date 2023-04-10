@@ -4,6 +4,8 @@ import type { AppProps } from "next/app";
 import { Provider, useSelector } from "react-redux";
 import Header from "@/components/Header";
 import Spinner from "@/components/Spinner";
+import 'react-toastify/dist/ReactToastify.css'
+import { ToastContainer } from 'react-toastify';
 
 function App({ Component, pageProps }: AppProps) {
   return (
@@ -11,6 +13,7 @@ function App({ Component, pageProps }: AppProps) {
       <Header>
         <Component {...pageProps} />
       </Header>
+      <ToastContainer autoClose={2000}/>
     </Provider>
   );
 }

@@ -1,3 +1,4 @@
+import { HDNodeWallet } from "ethers";
 import { ReactNode } from "react";
 import { Action, AnyAction } from "redux";
 import { ThunkAction } from "redux-thunk";
@@ -83,12 +84,58 @@ export type CallbackFunction = (arg:Function) => void
 
 // Mnemonic interface
 
-export interface MnemonicGeneratorState{
+export interface IMnemonicGeneratorState{
   mnemonicWord:null | string,
   entropy:null | Uint8Array,
   seedString:null| string,
   seedBuffer:Uint8Array|null,
   wordLength:number,
-  derivedAddresses:string[],
-  path:string
+  derivedAddresses:IHDWallet[],
+  pathIndex:number,
+  derivedPath:string
 }
+
+export interface ISetWordLength {
+  type:'SET_WORD_LENGTH',
+  payload:number
+}
+
+export interface ISetMnemonicWord {
+  type:'SET_MNEMONIC_WORD',
+  payload:string|null
+}
+
+export interface ISetSeedHex {
+  type:'SET_SEED_HEX',
+  payload:string | null
+}
+
+export interface ISetEntropy {
+  type:'SET_ENTROPY',
+  payload:ArrayBuffer | null
+}
+
+export interface ISetPathIndex {
+  type:'SET_PATH',
+  payload:number
+}
+
+export interface ISetDerivedPath {
+  type:'SET_DERIVED_PATH',
+  payload:string
+}
+
+export interface IResetAddress{
+  type:'RESET_ADDRESSES',
+}
+
+export interface IResetMnemonicState{
+  type:'RESET',
+}
+
+export interface ISetAddress{
+  type:'SET_NEW_ADDRESSES',
+  payload:IHDWallet[]
+}
+
+export interface IHDWallet extends HDNodeWallet{}
