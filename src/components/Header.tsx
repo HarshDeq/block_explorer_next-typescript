@@ -44,9 +44,14 @@ const Header = (props: Props) => {
                   </div>
                 </CustomLink>
               </div>
-              <div>
+              <div style={{ marginRight: "1rem" }}>
                 <CustomLink href="/mnemonic">
                 <div  style={{ textDecoration: "underline" }}>Mnemonic</div>
+                </CustomLink>
+              </div>
+              <div style={{ marginRight: "1rem" }}>
+                <CustomLink href="/send">
+                <div  style={{ textDecoration: "underline" }}>Send</div>
                 </CustomLink>
               </div>
             </StyledDiv>
